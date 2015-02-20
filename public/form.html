@@ -13,7 +13,7 @@ Last_Name<br>
 <input type="text" name="lastname">
 <input type="submit" value="Submit">
 </form>
-
+<p id="one"></p>
 <script type = "text/javascript">
  
 
@@ -27,22 +27,23 @@ $(document).ready(function(){
         //alert("hello");
         var first = $("input[name=firstname]").val();
         var last =  $("input[name=lastname]").val();
-        //console.log(lname)
-        var name = "fname: " +first+ " " + "lname: " +last ;
-        console.log(name); 
+        
+        var name ={first,last};
+        //console.log(name1); 
         
         var a ="";
         $.ajax({
                 type: "POST",
                 url: $("form").attr("action"),
                  
-                data:  name, 
+                data : name, 
                 
-                success: function(data)
+                success: function(r)
+
         {
-        	          
+        	    document.getElementById("one").innerHTML = "First_Name: " +r.first + "  & " + "Last_Name: " +r.last;      
                  
-                 console.log(data);
+                 //console.log(r.name1);
         }
         	            
             
