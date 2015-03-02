@@ -3,19 +3,22 @@
 				<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   				<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 				<link rel="stylesheet" type="text/css" href="Bs_ajaxcall.css">
-				<!--<meta name="viewport"  content="width=device-width" >
+				
+				<!--<meta name="viewport"  content="width=device-width" >-->
 				<!--<link rel="stylesheet" type="text/css" href="" media="screen and (max-width:1000)">-->
 		</head>
 		<body>
 			<header>
-				<nav class="navbar navbar-default">
+				<nav class="navbar navbar-inverse">
   				<div class="container-fluid">
   					 <ul class="nav navbar-nav" >
 		    			 	<li><a href="#">Store</a></li>
 		        			<li><a href="#">Home</a></li>
 		       				<li><a href="#">About</a></li>
 		        			<li><a href="#">Contact</a></li> 
+		        			
    					 </ul>
     			</div>
 				</nav>
@@ -34,20 +37,85 @@
     						</div>
 
 					</section>
-					<section id = "section2">
-					<form class="form-group">
+					<section id = "section2" class="col-md-9">
+					<form class="form-group" action="/products" method = "post" role="form" id = "form1">
 						<label style= "padding-right: 11px;">Search</label>   
 				
-						<input type = "text" placeholder = "Search" class = "span3 search-query"></br>
-						
+						<input type = "text" placeholder = "Search" class = "span3" disabled ></br>
+            
+	
 						<label>Add Item</label>
-						 <input type = "text" placeholder = "Item Name"> 
-						 <input type = "text" placeholder ="Desc"> 
-						  <input type = "text" placeholder= "Price">  
-						<button class ="btn btn-primary">Add</button>
-				</form>
+						 <input type = "text"  placeholder = "Item Name" id = "Item Name" > 
+						 <input type = "text"  placeholder ="Desc" id = "Desc"> 
+						  <input type = "text"  placeholder= "Price" id = "Price">  
+						<button class ="btn btn-primary" id = "add">Add</button>
+					</form>
 
 					</section>
+					<section id = "section3" class="col-md-9" >
+						
+					</section>
+					
 			</section>
+
+			<script type="text/javascript">
+			$(document).ready(function(){
+				
+
+				$(document.getElementById("add")).click(function(e){
+					e.preventDefault();
+
+				   Product = $(document.getElementById("Item Name")).val();
+					//alert(Product);
+					Product_desc = $(document.getElementById("Desc")).val();
+					Product_price = $(document.getElementById("Price")).val();
+
+					var p = {Product , Product_desc, Product_price}
+
+					$.ajax({
+
+						type: "POST",
+                		url: $("form").attr("action"),
+                 		data : p ,
+                		success: function(r)
+                		{
+                			// clear values
+                		//$("#form1").reset();
+                		//$("#form").trigger('reset');
+
+
+                		//adding all values	
+                		var div = $("<div></div>").addClass("jumbotron");
+
+                		var c =  $("<button></button>").text(r.Product_price).addClass("btn btn-primary pull-right ");
+                		$(div).append(c);
+                		
+                		var a =  $("<h3></h3>").text(r.Product);
+                	    $(div).append(a);
+                	    var r1 =  $("<button></button>").addClass("btn btn-primary pull-right");
+                	    var remove = $("<span></span>").addClass("glyphicon glyphicon-remove");
+                		$(r1).append(remove);
+                		$(div).append(r1);
+						var b =  $("<h5></h5>").text(r.Product_desc);
+                		$(div).append(b);
+                		
+                		$("#section3").append(div);
+                		// removing elements
+
+                		$(r1).click(function(){
+
+                			$(div).remove();
+
+                		});
+
+						} 
+
+
+						});
+
+				});
+
+			});
+			</script>
 		</body>
 </html>
