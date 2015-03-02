@@ -22,6 +22,17 @@
 	padding-bottom:30px;
 }
 
+.gly{
+
+	border-radius: 100%;
+	padding: 0px;
+	box-shadow: 0px;
+	border: 0px;
+	margin-right: -25px;
+}
+
+
+
 
 @media screen and (max-width  : 700px){
 
