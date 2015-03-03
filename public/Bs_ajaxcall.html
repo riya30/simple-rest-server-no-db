@@ -52,8 +52,11 @@
 					</form>
 
 					</section>
-					<section id = "section3" class="col-md-9" >
-						
+					<section id = "section3" class="col-md-9 pagination" >
+								<ul class="pager">
+							    <li><a href="#">Previous</a></li>
+							    <li><a href="#">Next</a></li>
+							    </ul>
 						
 					</section>
 					
@@ -61,19 +64,18 @@
 
 			<script type="text/javascript">
 			$(document).ready(function(){
-					/*$.get( "/products" );
-				
-						$( "#section3" ).load( "/products" ); */
-				$(document.getElementById("add")).click(function(e){
-					e.preventDefault();
 
-				   Product = $(document.getElementById("Item Name")).val();
+				
+				
+					$(document.getElementById("add")).click(function(e){
+					e.preventDefault();
+					Product = $(document.getElementById("Item Name")).val();
 					//alert(Product);
 					Product_desc = $(document.getElementById("Desc")).val();
 					Product_price = $(document.getElementById("Price")).val();
 
-					var p = {Product , Product_desc, Product_price}
-
+					p = {Product , Product_desc, Product_price}
+				   	
 					$.ajax({
 
 						type: "POST",
@@ -82,50 +84,21 @@
                 		success: function(r)
                 		{
 
-                				var data = $('<div class ="jumbotron" ><button class = "pull-right gly glyphicon glyphicon-remove-sign"><button class ="btn btn-primary pull-right"> '+r.Product_price +'</button><p>' + r.Product + '</p><p>'+ r.Product_desc +'</p></div>')
+                			 data1 = $('<div class ="jumbotron" ><button class = "pull-right gly glyphicon glyphicon-remove-sign"><button class ="btn btn-primary pull-right"> '+r.Product_price +'</button><p>' + r.Product + '</p><p>'+ r.Product_desc +'</p></div>')
 
-                			$("#section3").append(data);
-
-                			
-                			$("#section3").click(function remove(e)
-                			{
-
-                					console.log(e.target);
-
-                					
-                					if(e.target.hasClass() == "gly")
-                					{
-
-                						console.log("hi");
-                						e.target.parent.remove();
-                					}
-
-
-                			});
-                				
-
-
+                			$("#section3").append(data1);
 
                 		
-
-                			
-
-                			
-
+                		}
+                		});
+                		
 
                 		/*$(".gly").click(function(){
                 			$(data).remove();
                 			
                 		}); 
-*/
-							
-							
-							
-					
 
-                		
-
-                			/*// clear values
+                		// clear values
                 		//$("#form1").reset();
                 		//$("#form").trigger('reset');
 
@@ -152,16 +125,53 @@
 
                 			$(div).remove();
 
-                		});*/
+                		});
+
+							if($(e.target).is(":button.gly"))
+			                				{
+			                					//console.log("hi")
+			                					
+			                					$(e.target).parent("div").remove();
+			                				}	
+			                					*/
+
+			
+						});
+							
 
 						
+						$("#section3").on("click" ,function remove(e)
+                			{ 
+			                if($(e.target).is(":button.gly"))
+			                { 
+			                	$(e.target).parent("div").remove();	
+							}
+														
+                			});	
+				
 
-						} 
+				$.ajax({
+						type: "get",
+                		url: $("form").attr("action"),
+                		
+                 		
+                 		success : function(d){
+
+                 			$.each(d, function(i ,val){
+                 				//console.log(d);
+                 				//console.log(val)
+                 				var display = $('<div class ="jumbotron" ><button class = "pull-right gly glyphicon glyphicon-remove-sign"><button class ="btn btn-primary pull-right"> '+val.Product+'</button><p>'  + val.Product_desc+ '</p><p>'+ val.Product_price+'</p></div>')
+                 				//console.log(display);
+
+                 				$("#section3").append(display);
+                 			});
 
 
-						});
+                 		}
 
-				});
+
+					  });
+				
 
 			});
 			</script>
