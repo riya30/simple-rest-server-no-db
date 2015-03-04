@@ -1,0 +1,87 @@
+.nav-pills
+{
+	border: 1px solid black;
+	border-radius: 7px;
+	margin-left: 3px;
+}
+
+ .nav-pills li
+{
+	border-bottom: 1px solid black;
+	border-radius: 0px;
+
+}
+
+.nav-pills li:last-child{
+
+	border-bottom: 0px;
+}
+
+.jumbotron{
+	padding-top:30px;
+	padding-bottom:30px;
+	border-radius: 5px;
+
+}
+
+
+.itemRemove {
+	margin:0;
+	padding:0;
+	border: 0px;
+}
+
+
+.itemPrice
+ {
+	margin:0;
+	padding: 5px;
+	width: auto;
+}
+
+
+@media screen and (max-width  : 700px){
+
+	.form-group{
+		color: red;
+		float: none;
+		width: auto;
+		margin-top: 15px;
+	}
+
+header ul li {
+	width: 50%;
+	color : red;
+	border: 1px solid black;
+	float: left;
+	margin-bottom: -1px;
+
+
+}
+.nav-pills{
+	
+	margin-left: 0px;
+
+
+}
+
+
+.row >.col-md-8 ,.itemPrice ,.itemRemove{
+
+	float: left;
+}
+
+.itemPrice , .itemRemove{
+	margin-left: 100px;
+}
+
+.itemRemove {
+	margin-right: -50px;
+}
+
+
+
+
+
+
+}

@@ -1,0 +1,140 @@
+<!doctype html>
+		<head>
+				<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  				<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+				<link rel="stylesheet" type="text/css" href="Product_Display.css">
+				
+				<!--<meta name="viewport"  content="width=device-width" >-->
+				<!--<link rel="stylesheet" type="text/css" href="" media="screen and (max-width:1000)">-->
+		</head>
+		<body>
+			<header>
+				<nav class="navbar navbar-inverse">
+  				<div class="container-fluid">
+  					 <ul class="nav navbar-nav" >
+		    			 	<li><a href="#">Store</a></li>
+		        			<li><a href="#">Home</a></li>
+		       				<li><a href="#">About</a></li>
+		        			<li><a href="#">Contact</a></li> 
+		        			
+   					 </ul>
+    			</div>
+				</nav>
+			</header>
+			<section>
+					<section id = "section1">
+
+							<div class="col-md-4">
+      								<ul class="nav nav-pills nav-stacked menu">
+       									 <li class="active"><a href="#">Hello</a></li>
+        								<li><a href="#">Home</a></li>
+       									<li><a href="#">Hi</a></li>
+        								<li><a href="#">HELLO</a></li>
+        								<li><a href="#">HI</a></li>
+     								</ul>
+    						</div>
+
+					</section>
+					<section id = "section2" class="col-md-8">
+					<form class="form-group" action="/products" method = "post" role="form" id = "form1">
+						<label style= "padding-right: 11px;">Search</label>   
+				
+						<input type = "text" placeholder = "Search" class = "span3" disabled ></br>
+            
+	
+						<label>Add Item</label>
+						 <input type = "text"  placeholder = "Item Name" id = "Item Name" > 
+						 <input type = "text"  placeholder ="Desc" id = "Desc"> 
+						  <input type = "text"  placeholder= "Price" id = "Price">  
+						<button class ="btn btn-primary" id = "add">Add</button>
+					</form>
+
+					</section>
+					<section id = "section3" class="col-md-8 pagination" >
+								<ul class="pager">
+							    <li><a href="#">Previous</a></li>
+							    <li><a href="#">Next</a></li>
+							    </ul>
+						
+					</section>
+					
+			</section>
+
+			<script type="text/javascript">
+			$(document).ready(function(){
+
+					$(document.getElementById("add")).click(function(e){
+					e.preventDefault();
+					Product = $(document.getElementById("Item Name")).val();
+					Product_desc = $(document.getElementById("Desc")).val();
+					Product_price = $(document.getElementById("Price")).val();
+
+					p = {Product , Product_desc, Product_price}
+				   	// appending values on div 
+					$.ajax({
+							type: "POST",
+	                		url: $("form").attr("action"),
+	                 		data : p ,
+	                		success: function(r)
+                							{ data1 = $('<div class ="jumbotron" ><div class = "row"><div class = "col-md-8"><b>' + r.Product + '</b></div><div class = "col-md-2"><button class ="itemPrice col-md-2 btn btn-primary" id = "submit"> ' + r.Product_price + '</button></div><div class = "col-md-2"><button class = "itemRemove col-md-2 gly glyphicon glyphicon-remove-sign" id = "' + r.id +'"></button></div></div><div class = "row"><div class= "col-md-12">' + r.Product_desc + '</div></div></div>');
+
+						                			$("#section3").append(data1);
+						                			
+						                		    //clear values
+						                		     $("#form1").trigger('reset');
+                							}
+                		});
+             			});
+							
+
+						// delete data from url and page both
+						$("#section3").on("click" ,function(e)
+                			{ 
+			                if($(e.target).is(":button.gly"))
+			                {  var a = e.target.id;
+			                	console.log(a);
+			          		   $.ajax({
+				                		type: "delete",
+				                		url: "/products/" + e.target.id,
+				                		success: function(data)
+				                 						{
+				                 							$(e.target).parent("div").remove();
+		
+			                							}
+
+				             		 });   						
+			          		}
+				            }); 
+				               			
+							//}
+														
+                			//});	
+				
+				// display all data on a page
+
+				$.ajax({
+						type: "get",
+                		url: $("form").attr("action"),
+                		
+                 		
+                 		success : function(d)
+                 		{
+
+                 			$.each(d, function(i ,val)
+                 			{
+                 				
+                 				var display = $('<div class ="jumbotron" ><div class = "row"><div class = "col-md-8"><b>' + val.Product + '</b></div><div class = "col-md-2"><button class ="itemPrice btn btn-primary" id = "submit"> ' + val.Product_price + '</button></div><div class = "col-md-2"><button class = "itemRemove gly glyphicon glyphicon-remove-sign" id = "' + val.id +'"></button></div></div><div class = "row"><div class= "col-md-12">' + val.Product_desc + '</div></div></div>')
+                 				   $("#section3").append(display);
+                 			});
+						}
+
+
+					  });
+				
+
+			});
+			</script>
+		</body>
+</html>
