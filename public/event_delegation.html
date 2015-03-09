@@ -1,0 +1,129 @@
+<!doctype html>
+		<head>
+				<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  				<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+				<link rel="stylesheet" type="text/css" href="Bs_ajaxcall.css">
+				
+				<!--<meta name="viewport"  content="width=device-width" >-->
+				<!--<link rel="stylesheet" type="text/css" href="" media="screen and (max-width:1000)">-->
+		</head>
+		<body>
+			<header>
+				<nav class="navbar navbar-inverse">
+  				<div class="container-fluid">
+  					 <ul class="nav navbar-nav" >
+		    			 	<li><a href="#">Store</a></li>
+		        			<li><a href="#">Home</a></li>
+		       				<li><a href="#">About</a></li>
+		        			<li><a href="#">Contact</a></li> 
+		        			
+   					 </ul>
+    			</div>
+				</nav>
+			</header>
+			<!--main section-->
+			<section>
+					<!--section1 -->	
+					<section id = "section1">
+
+							<div class="col-md-3">
+      								<ul class="nav nav-pills nav-stacked menu">
+       									 <li class="active"><a href="#">Hello</a></li>
+        								<li><a href="#">Home</a></li>
+       									<li><a href="#">Hi</a></li>
+        								<li><a href="#">HELLO</a></li>
+        								<li><a href="#">HI</a></li>
+     								</ul>
+    						</div>
+
+					</section>
+					<!--section2 -->
+					<section id = "section2" class="col-md-9">
+					<form class="form-group" action="/products" method = "post" role="form" id = "form1">
+						<label style= "padding-right: 11px;">Search</label>   
+						<input type = "text" placeholder = "Search" class = "span3" disabled ></br>
+            			<label>Add Item</label>
+						<input type = "text"  placeholder = "Item Name" id = "Item Name" > 
+						<input type = "text"  placeholder ="Desc" id = "Desc"> 
+						<input type = "text"  placeholder= "Price" id = "Price">  
+						<button class ="btn btn-primary" id = "add">Add</button>
+					</form>
+					</section>
+					<!--section3 -->
+					<section id = "section3" class="col-md-9 pagination" >
+								<ul class="pager">
+							    <li><a href="#">Previous</a></li>
+							    <li><a href="#">Next</a></li>
+					</section>
+					
+			</section>
+
+			<script type="text/javascript">
+			$(document).ready(function()
+			{
+					// appending values on div 
+					$(document.getElementById("add")).click(function(e)
+					{
+						e.preventDefault();
+						Product = $(document.getElementById("Item Name")).val();
+						Product_desc = $(document.getElementById("Desc")).val();
+						Product_price = $(document.getElementById("Price")).val();
+						p = {Product , Product_desc, Product_price}
+					   	
+						$.ajax({
+									type: "POST",
+			                		url: $("form").attr("action"),
+			                 		data : p ,
+			                		success: function(r)
+		                							{ data1 = $('<div class ="jumbotron" ><button class = "pull-right gly glyphicon glyphicon-remove-sign" id = "' + r.id +'"><button class ="btn btn-primary pull-right" id = "submit"> ' + r.Product_price + '</button><p id = style = "width: 600px;">' + r.Product + '</p><p>' + r.Product_desc + '</p></div>');
+
+								                	 $("#section3").append(data1);
+								                			
+								                		    //clear values
+								                	 $("#form1").trigger('reset');
+		                							}
+	                			});
+            		});
+							
+
+			// delete data from url and page both
+			$("#section3").on("click",".gly" ,function()
+               { 
+
+                	$(this).parent("div").remove();
+					  $.ajax({
+					  			type: "delete",
+				                url: "/products/" + this.id,
+				  				success: function(data)
+				                {
+				                	alert("hi");
+								}
+
+				              });   						
+			          		
+				}); 
+	
+			// display all data on a page
+			$.ajax({
+				     type: "get",
+                	 url: $("form").attr("action"),
+                	 success : function(d)
+                 		{
+                 			$.each(d, function(i ,val)
+                 			{
+                 				
+                 				var display = $('<div class ="jumbotron" ><button class = "pull-right gly glyphicon glyphicon-remove-sign" id = "' + val.id +'"><button class ="btn btn-primary pull-right" id = "submit"> '+val.Product_price+'</button><p>'  + val.Product_desc+ '</p><p style = "width: 600px;"">'+ val.Product+'</p></div>')
+                 				   $("#section3").append(display);
+                 			});
+						}
+
+
+				 	});
+				
+
+			});
+			</script>
+		</body>
+</html>
