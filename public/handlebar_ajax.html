@@ -1,0 +1,43 @@
+<!doctype html>
+		<head>
+			
+			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+			<script src="handlebars-v3.0.0.js"></script>
+			<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+			
+		</head>
+		<body>
+			<form id = "form1">
+				<label>Enter Name</label>
+				<input id ="name" type = "textbox" placeholder = "Enter Your Name">
+				<input id = "button" type = "submit">
+			</form>
+			<div id  = "final_result"></div>  <!-- tempplate will  display here -->
+		
+    		<script type="text/javascript">
+
+			$("#button").on("click" , function(e){
+			e.preventDefault();   // prevent to submit
+		
+			 $.ajax({	url : "handlebar_ajax_template.html", // handlbar template 
+						
+						success : function(data)   // data is handlebar template in html format
+						{ 
+							console.log(data);
+						console.log($("#display_name"));
+						Tname = $("#name").val(); 
+						console.log(Tname);
+						template = Handlebars.compile($(data).html()); // data(htmlfile) 
+						console.log(template)
+						html = template({name:Tname});
+						console.log(html);
+						$("#final_result").append(html); 
+							
+						}
+				  }); 
+
+			});
+			</script>  
+
+		</body>
+</html>
