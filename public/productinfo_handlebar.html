@@ -1,0 +1,164 @@
+<!doctype html>
+		<head>
+				<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  				<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+				<link rel="stylesheet" type="text/css" href="Bs_ajaxcall.css">
+				<script src="handlebars-v3.0.0.js"></script>
+				
+
+				
+				<!--<meta name="viewport"  content="width=device-width" >-->
+				<!--<link rel="stylesheet" type="text/css" href="" media="screen and (max-width:1000)">-->
+		</head>
+		<body>
+			<header>
+				<nav class="navbar navbar-inverse">
+  				<div class="container-fluid">
+  					 <ul class="nav navbar-nav" >
+		    			 	<li><a href="#">Store</a></li>
+		        			<li><a href="#">Home</a></li>
+		       				<li><a href="#">About</a></li>
+		        			<li><a href="#">Contact</a></li> 
+		        			
+   					 </ul>
+    			</div>
+				</nav>
+			</header>
+			<section>
+					<section id = "section1">
+
+							<div class="col-md-3">
+      								<ul class="nav nav-pills nav-stacked menu">
+       									 <li class="active"><a href="#">Hello</a></li>
+        								<li><a href="#">Home</a></li>
+       									<li><a href="#">Hi</a></li>
+        								<li><a href="#">HELLO</a></li>
+        								<li><a href="#">HI</a></li>
+     								</ul>
+    						</div>
+
+					</section>
+					<section id = "section2" class="col-md-9">
+					<form class="form-group" action="/products" method = "post" role="form" id = "form1">
+						<label style= "padding-right: 11px;">Search</label>   
+				
+						<input type = "text" placeholder = "Search" class = "span3" disabled ></br>
+            
+	
+						<label>Add Item</label>
+						 <input type = "text"  placeholder = "Item Name" id = "Item Name" > 
+						 <input type = "text"  placeholder ="Desc" id = "Desc"> 
+						  <input type = "text"  placeholder= "Price" id = "Price">  
+						<button class ="btn btn-primary" id = "add">Add</button>
+					</form>
+
+					</section>
+					<section id = "section3" class="col-md-9">
+								
+						
+					</section>
+					
+			</section>
+			<script type = "text/x-handlebars-template" id = "Result_Template">
+
+						<div class ="jumbotron" >
+
+						    <div class = "row">
+						        <div class = "col-md-8">{{ Product_Name }}</div>
+						        <div class = "col-md-2"><button class ="itemPrice col-md-2 btn btn-primary" id = "submit"> {{ price }}</button></div>
+						        <div class = "col-md-2"><button class = "itemRemove col-md-2 gly glyphicon glyphicon-remove-sign" id ={{id}}></button></div>
+						    </div>
+
+						    <div class = "row">
+						    	<div class= "col-md-12">{{ desc }}</div>
+						    </div>
+						</div> 
+			</script>
+			<script type="text/javascript">
+			$(document).ready(function(){
+
+					$(document.getElementById("add")).click(function(e){
+					e.preventDefault();
+					Product = $(document.getElementById("Item Name")).val();
+					Product_desc = $(document.getElementById("Desc")).val();
+					Product_price = $(document.getElementById("Price")).val();
+
+					p = {Product , Product_price ,  Product_desc}
+				   	// appending values on div 
+					$.ajax({
+							
+	                		url: "/products",
+	                		data : p,
+	                		type : "post",
+
+	                 		
+	                		success: function(data)
+                							{ 
+                								
+                								tempalte =  Handlebars.compile($("#Result_Template").html());
+                								html= tempalte({Product_Name :Product ,  price :Product_price , desc : Product_desc })
+                									//console.log(html);
+						                			$("#section3").append(html);
+						                			
+						                		    //clear values
+						                		     $("#form1").trigger('reset');
+                							}
+                		}); 
+             			}); 
+							
+
+						//delete data from url and page both
+						$("#section3").on("click" ,function(e)
+                			{ 
+			                if($(e.target).is(":button.gly"))
+			                {  var a = e.target.id;
+			                	console.log(a);
+			          		   $.ajax({
+				                		type: "delete",
+				                		url: "/products/" + e.target.id,
+				                		success: function(data)
+				                 						{
+				                 							$(e.target).parent(".jumbotron").remove();
+		
+			                							}
+
+				             		 });   						
+			          		}
+				            }); 
+				               			
+							//}
+														
+                			//}); 	
+				
+				// display all data on a page 
+
+				$.ajax({
+						type: "get",
+                		url: $("form").attr("action"),
+                		
+                 		
+                 		success : function(d)
+                 		{
+
+                 			$.each(d, function(i ,val)
+                 			{
+                 				
+                 				
+                				//console.log("hi")
+                				tempalte =  Handlebars.compile($("#Result_Template").html());
+                			    html= tempalte({Product_Name :val.Product ,  price :val.Product_price , desc : val.Product_desc , id :val.id})
+                				//console.log(html);
+						        $("#section3").append(html);
+						                			
+                 			});
+						}
+
+					  }); 
+				
+
+			});
+			</script>
+		</body>
+</html>			
